@@ -15,5 +15,13 @@ foreach ($dirs as $dir) {
     }
 }
 
+// Copy pre-seeded SQLite database to writable /tmp if it doesn't exist
+$targetDb = '/tmp/database.sqlite';
+$sourceDb = __DIR__ . '/../database/database.sqlite';
+if (!file_exists($targetDb) && file_exists($sourceDb)) {
+    @copy($sourceDb, $targetDb);
+    @chmod($targetDb, 0666);
+}
+
 // Forward Vercel serverless requests to Laravel's public entrypoint
 require __DIR__ . '/../public/index.php';
